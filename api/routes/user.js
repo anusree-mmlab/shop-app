@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 
 router.post('/signup',(req, res, next) => {
@@ -66,6 +67,63 @@ router.get('/:userId',(req, res, next) => {
     }).catch(err => {console.log(err);
         res.status(500).json({
             message: 'error occured during user fetch'
+        })
+    });
+    
+});
+
+router.post('/login',(req, res, next) => {
+    User.findOne({email:req.body.email}).exec().
+    then((result) => {
+
+        //Get the password from res and compare it with user sign in password
+        if(result) {
+            bcrypt.compare(req.body.password, result.password, (err, cRes) => {
+                if(err) {
+                    return res.status(500).json({
+                        error: {
+                            message: 'Auth Failed'
+                        }
+                    })
+                    next();
+                }
+
+                if(cRes === true) {
+                    const token = jwt.sign(
+                        {
+                            email: req.body.email,
+                            id: result._id
+                        },
+                        process.env.SECRET_KEY,
+                        {
+                            expiresIn : "1h"
+                        });
+
+                    return res.status(200).json({
+                        message: `user exists`,
+                        token: token
+                    });
+                    next();
+                } 
+                res.status(500).json({
+                    error: {
+                        message: 'Auth Failed'
+                    }
+                })
+
+            });
+        } else {
+            res.status(500).json({
+                error: {
+                    message: 'Auth Failed'
+                }
+            })
+        }
+    }).catch(err => {
+        res.status(500).json({
+            error: {
+                message: 'Auth Failed'
+            }
         })
     });
     

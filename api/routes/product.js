@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
 const Product = require('../models/product.model');
+const Authorization = require('../middlewares/check-auth');
 
 router.get('/',(req, res, next) => {
     Product.find().exec().
@@ -32,7 +33,7 @@ router.get('/:productId',(req, res, next) => {
     
 });
 
-router.post('/',(req, res, next) => {
+router.post('/',Authorization,(req, res, next) => {
     const newProduct = new Product(
         {
             _id: new mongoose.Types.ObjectId(),
@@ -53,8 +54,6 @@ router.post('/',(req, res, next) => {
             message: 'error occured during prod create'
         })
     });
-
-    
 });
 
 module.exports = router;
