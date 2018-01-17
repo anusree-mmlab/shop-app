@@ -1,2 +1,2 @@
 # shop-app
-This is restful test application
+This is a RESTful node express test application
