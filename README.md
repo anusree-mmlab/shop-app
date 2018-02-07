@@ -2,14 +2,14 @@
 This is a RESTful node express test application
 
 
-##Test user 
+## Test user 
 
  {
     "email": "anusree@alignminds.com",
     "password" : "123456"
  }
 
- ### Workflow
+ ## Workflow
 
  morgan
 nodemon
@@ -24,7 +24,9 @@ router.get('/:id', (req, res, next) => {
 
 })
 
-####Authentication
+### Authentication
+
+```javascript
 bcrypt = require('bcrypt')
 jwt = require('jsonwebtoken')
 
@@ -54,14 +56,16 @@ bcrypt.compare(dbpassword, inputpassword, (err, res)  => {
 		//Return token to the user
 	}
 })
-
-=====User will pass the token in the header with 
+```
+User will pass the token in the header with 
 Authorization "Bearer " + token
 
 the requests will be validated with the token 
 
+```javascript
 const Authorization = require("../auth");
 router.post('/',Authorization,(req, res, next) => {
 	
 
 })
+```
