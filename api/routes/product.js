@@ -34,6 +34,7 @@ router.get('/:productId',(req, res, next) => {
 });
 
 router.post('/',Authorization,(req, res, next) => {
+    //router.post('/',(req, res, next) => {
     const newProduct = new Product(
         {
             _id: new mongoose.Types.ObjectId(),
@@ -54,6 +55,26 @@ router.post('/',Authorization,(req, res, next) => {
             message: 'error occured during prod create'
         })
     });
+});
+
+router.delete('/delete/:productId', (req, res, next) => {
+    console.log('delete', req.params.productId);
+    if(req.params.productId) {
+        Product.remove({
+            _id: req.params.productId
+        }).
+        then((result) => {
+            res.status(200).json({
+                message: `Removed product`
+            });
+        }).
+        catch((error) => {
+            res.status(500).json({
+                message: 'error occured during product delete'
+            })
+        });
+    
+    }
 });
 
 module.exports = router;
