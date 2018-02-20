@@ -13,19 +13,16 @@ mongoose.Promise = require('bluebird');
 
 const productRoutes = require('./api/routes/product');
 const userRoutes = require('./api/routes/user');
+const generalRoutes = require('./api/routes/general');
 
 
 
 //Access control origin alow.
-/* app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin","*");
-    res.header("Access-Control-Allow-Headers","Origin, Content-Type, Accept");
-
-    if(req.method === 'OPTIONS') {
-        res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,PATCH");
-        return res.status(200).json({});
-    }
-}); */
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -34,6 +31,11 @@ app.use(morgan("dev"));
 
 app.use('/products',productRoutes);
 app.use('/users',userRoutes);
+app.use('/general',generalRoutes);
+
+
+
+
 
 app.use((req, res, next) => {
     const err = new Error('Not Found');
