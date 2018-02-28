@@ -3,5 +3,6 @@
         "PORT" : "4000",
         "DB_PASS":"shop-app",
         "SECRET_KEY":"mysecret123"
-    }
+    },
+    "ignore": ["*.json", "fixtures/*"]
 }
